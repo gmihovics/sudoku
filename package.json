@@ -9,6 +9,7 @@
   "author": "Garrett Mihovics <garrett@gmihovics.com>",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.3",
     "mocha": "^5.1.1",
     "sinon": "^4.5.0"
   }
