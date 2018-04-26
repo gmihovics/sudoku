@@ -17,7 +17,20 @@ Sudoku.prototype.verifySquare = function() {
 };
 
 Sudoku.prototype.getSquareForCell = function(cell) {
-  return [];
+  let square = [];
+
+  //Find which of the 3x3 grid of squares our cell is in
+  let squareRowIndex = Math.floor(cell[1]/3);
+  let squareColumnIndex = Math.floor(cell[0]/3);
+  let squareStartingOffset = (squareRowIndex * 3 * 9) + (squareColumnIndex * 3);
+
+  for(let rowOffset = 0; rowOffset < 3; rowOffset++) {
+    for(let columnOffset = 0; columnOffset < 3; columnOffset++) {
+      square.push(this.puzzle[squareStartingOffset + columnOffset + (rowOffset * 9)]);
+    }
+  }
+
+  return square;
 };
 
 Sudoku.prototype.getRowForCell = function(cell) {
