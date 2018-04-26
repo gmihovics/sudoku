@@ -32,7 +32,14 @@ Sudoku.prototype.getRowForCell = function(cell) {
 };
 
 Sudoku.prototype.getColumnForCell = function(cell) {
-  return [];
+  let column = [];
+  let currentColumn = cell[0];
+
+  for (let i = 0; i < 9; i++) {
+    column[i] = this.puzzle[currentColumn + (i*9)];
+  }
+
+  return column;
 };
 
 module.exports = new Sudoku();
