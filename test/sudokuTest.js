@@ -35,7 +35,7 @@ describe('Sudoku', function() {
     });
 
     it('should return the correct numbers', function() {
-      assert.deepEqual(sudoku.getRowForCell([4, 3]), [9, 7, 4, 1, 5, 2, 3, 8, 6])
+      assert.deepEqual(sudoku.getRowForCell([4, 3]), [9, 7, 4, 1, 5, 2, 3, 8, 6]);
     })
   });
 
@@ -45,7 +45,7 @@ describe('Sudoku', function() {
     });
 
     it('should return the correct numbers', function() {
-      assert.deepEqual(sudoku.getColumnForCell([7, 4]), [9, 3, 4, 8, 2, 1, 5, 7, 6])
+      assert.deepEqual(sudoku.getColumnForCell([7, 4]), [9, 3, 4, 8, 2, 1, 5, 7, 6]);
     })
   });
 
@@ -55,7 +55,15 @@ describe('Sudoku', function() {
     });
 
     it('should return the correct numbers', function() {
-      assert.deepEqual(sudoku.getSquareForCell([6, 6]), [8, 5, 3, 9, 7, 4, 1, 6, 2])
-    })
+      assert.deepEqual(sudoku.getSquareForCell([6, 6]), [8, 5, 3, 9, 7, 4, 1, 6, 2]);
+    });
+
+    it('should return the square for cell [0,0]', function() {
+      assert.deepEqual(sudoku.getSquareForCell([0, 0]), [4, 5, 6, 1, 2, 9, 7, 3, 8]);
+    });
+
+    it('should return the center square for cell [4,4]', function() {
+      assert.deepEqual(sudoku.getSquareForCell([4, 4]), [1, 5, 2, 8, 7, 6, 4, 3, 9]);
+    });
   });
 });
