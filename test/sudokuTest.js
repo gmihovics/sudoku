@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('chai').assert;
 
 describe('Sudoku', function() {
   let sudoku = require('../src/sudoku');
@@ -17,16 +17,26 @@ describe('Sudoku', function() {
     ];
   });
 
-  describe('verifySquare', function() {
+  describe('verifyArray', function() {
+    it('should return true when all numbers in an array are unique', function() {
+      assert.isTrue(sudoku.verifyArray([4, 5, 6, 1, 2, 9, 7, 3, 8]));
+    });
 
-  });
+    it('should return true when an array is completely empty', function() {
+      assert.isTrue(sudoku.verifyArray([]));
+    });
 
-  describe('verifyRow', function() {
+    it('should return true when an array is partially empty and valid', function() {
+      assert.isTrue(sudoku.verifyArray([4, 3, 8, 7, 9]));
+    });
 
-  });
+    it('should return false when all the numbers in an array are not unique', function() {
+      assert.isNotTrue(sudoku.verifyArray([4, 3, 8, 7, 9, 3, 5, 1, 2]));
+    });
 
-  describe('verifyColumn', function() {
-
+    it('should return false when an array is partially empty and not valid', function() {
+      assert.isNotTrue(sudoku.verifyArray([4, 3, 8, 7, 9, 4]));
+    });
   });
 
   describe('getRowForCell', function() {
