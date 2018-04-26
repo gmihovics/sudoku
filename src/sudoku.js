@@ -21,7 +21,14 @@ Sudoku.prototype.getSquareForCell = function(cell) {
 };
 
 Sudoku.prototype.getRowForCell = function(cell) {
-  return [];
+  let row = [];
+  let currentRow = cell[1] * 9;
+
+  for (let i = 0; i < 9; i++) {
+    row[i] = this.puzzle[currentRow + i];
+  }
+
+  return row;
 };
 
 Sudoku.prototype.getColumnForCell = function(cell) {
