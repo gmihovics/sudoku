@@ -166,7 +166,7 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1, 6, 2
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 81, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0).length, 81);
+      assert.equal(sudoku.generateCell(puzzle, 81, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0, []).length, 81);
     });
 
     it('should set the current cell with a valid number when found', function() {
@@ -182,7 +182,7 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1, 6
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0)[80], 2);
+      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0, [])[80], 2);
     });
 
     it('should return a completed puzzle when the last cell is successfully filled', function() {
@@ -198,7 +198,7 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1, 6
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0).length, 81);
+      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0, []).length, 81);
     });
 
     it('should go through all available numbers until it finds a valid one', function() {
@@ -214,7 +214,7 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1, 6
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0)[80], 2);
+      assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0, [])[80], 2);
     });
 
     it('should find the next cell after filling the current one', function() {
@@ -230,7 +230,7 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [6, 2], 0)[80], 2);
+      assert.equal(sudoku.generateCell(puzzle, 80, [6, 2], 0, [])[80], 2);
     });
 
     it('should backtrack and change the previous cell when no numbers can be found for the current cell', function() {
@@ -246,7 +246,9 @@ describe('Sudoku', function() {
         3, 9, 7, 5, 4, 8, 1, 2
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0)[79], 6);
+      assert.equal(
+        sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0, [{ numbers: [2, 5, 6], index: 0 }])[79], 6
+      );
     });
   });
 });

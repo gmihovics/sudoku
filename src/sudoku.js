@@ -2,19 +2,20 @@ const Sudoku = function() {
 };
 
 Sudoku.prototype.createPuzzle = function() {
-  let puzzle = Array(81);
-  let numbers = Array(9).fill(0).map((number, index) => index);
+  let puzzle = [];
+  let numbers = Array(9).fill(0).map((number, index) => index + 1);
 
-  return this.generateCell(puzzle, 0, this.shuffleArray(numbers), 0);
+  return this.generateCell(puzzle, 0, this.shuffleArray(numbers), 0, []);
 };
 
-Sudoku.prototype.generateCell = function(puzzle, cellIndex, numbers, numbersIndex) {
-  if (puzzle.length === cellIndex) {
+Sudoku.prototype.generateCell = function(puzzle, cellIndex, numbers, numbersIndex, history) {
+  if (puzzle.length === 81 && cellIndex === puzzle.length) {
     return puzzle;
   }
 
   if (numbers.length === numbersIndex) {
-    return this.generateCell(puzzle, cellIndex-1, numbers, numbersIndex)
+    let previousIteration = history.pop();
+    return this.generateCell(puzzle, cellIndex - 1, previousIteration.numbers, previousIteration.index + 1, history)
   }
 
   puzzle[cellIndex] = numbers[numbersIndex];
@@ -22,10 +23,18 @@ Sudoku.prototype.generateCell = function(puzzle, cellIndex, numbers, numbersInde
   let cell = [cellIndex % 9, Math.floor(cellIndex / 9)];
 
   if (this.verifyColumn(puzzle, cell) && this.verifySquare(puzzle, cell) && this.verifyRow(puzzle, cell)) {
-    return this.generateCell(puzzle, cellIndex+1, numbers, 0);
+    history.push({ numbers, index: numbersIndex });
+
+    if (cellIndex % 9 === 0) {
+      numbers = this.shuffleArray(numbers);
+    }
+
+    return this.generateCell(puzzle, cellIndex + 1, numbers, 0, history);
   }
 
-  return this.generateCell(puzzle, cellIndex, numbers, numbersIndex+1);
+  puzzle[cellIndex] = null;
+
+  return this.generateCell(puzzle, cellIndex, numbers, numbersIndex + 1, history);
 };
 
 Sudoku.prototype.shuffleArray = function(array) {
