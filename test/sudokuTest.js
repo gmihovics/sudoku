@@ -43,7 +43,23 @@ describe('Sudoku', function() {
 
     it('should return the correct numbers', function() {
       assert.deepEqual(sudoku.getRowForCell(puzzle, [4, 3]), [9, 7, 4, 1, 5, 2, 3, 8, 6]);
-    })
+    });
+
+    it('should ignore undefined values and skip over them', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, undefined, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6, 2
+      ];
+
+      assert.deepEqual(sudoku.getRowForCell(puzzle, [2, 4]), [5, 1, 8, 7, 6, 4, 2, 9]);
+    });
   });
 
   describe('getColumnForCell', function() {
@@ -53,7 +69,23 @@ describe('Sudoku', function() {
 
     it('should return the correct numbers', function() {
       assert.deepEqual(sudoku.getColumnForCell(puzzle, [7, 4]), [9, 3, 4, 8, 2, 1, 5, 7, 6]);
-    })
+    });
+
+    it('should ignore undefined values and skip over them', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, undefined, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6, 2
+      ];
+
+      assert.deepEqual(sudoku.getColumnForCell(puzzle, [2, 3]), [6, 9, 8, 4, 2, 1, 5, 7]);
+    });
   });
 
   describe('getSquareForCell', function() {
@@ -71,6 +103,22 @@ describe('Sudoku', function() {
 
     it('should return the center square for cell [4,4]', function() {
       assert.deepEqual(sudoku.getSquareForCell(puzzle, [4, 4]), [1, 5, 2, 8, 7, 6, 4, 3, 9]);
+    });
+
+    it('should ignore undefined values and skip over them', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, undefined, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6, 2
+      ];
+
+      assert.deepEqual(sudoku.getSquareForCell(puzzle, [1, 5]), [9, 7, 4, 5, 1, 8, 6, 2]);
     });
   });
 

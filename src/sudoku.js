@@ -77,6 +77,10 @@ Sudoku.prototype.getSquareForCell = function(puzzle, cell) {
 
   for (let rowOffset = 0; rowOffset < 3; rowOffset++) {
     for (let columnOffset = 0; columnOffset < 3; columnOffset++) {
+      if (!puzzle[squareStartingOffset + columnOffset + (rowOffset * 9)]) {
+        continue;
+      }
+
       square.push(puzzle[squareStartingOffset + columnOffset + (rowOffset * 9)]);
     }
   }
@@ -89,7 +93,11 @@ Sudoku.prototype.getRowForCell = function(puzzle, cell) {
   let currentRow = cell[1] * 9;
 
   for (let i = 0; i < 9; i++) {
-    row[i] = puzzle[currentRow + i];
+    if (!puzzle[currentRow + i]) {
+      continue;
+    }
+
+    row.push(puzzle[currentRow + i]);
   }
 
   return row;
@@ -100,7 +108,11 @@ Sudoku.prototype.getColumnForCell = function(puzzle, cell) {
   let currentColumn = cell[0];
 
   for (let i = 0; i < 9; i++) {
-    column[i] = puzzle[currentColumn + (i * 9)];
+    if (!puzzle[currentColumn + (i * 9)]) {
+      continue;
+    }
+
+    column.push(puzzle[currentColumn + (i * 9)]);
   }
 
   return column;
