@@ -1,9 +1,24 @@
-const Sudoku = function() {};
+const Sudoku = function() {
+};
 
 Sudoku.prototype.createPuzzle = function() {
   let puzzle = [];
 
   return puzzle;
+};
+
+Sudoku.prototype.generateCell = function(puzzle, cellIndex, numbers, numbersIndex) {
+  return puzzle;
+};
+
+Sudoku.prototype.shuffleArray = function(array) {
+  //Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/12646864#12646864
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
 };
 
 Sudoku.prototype.verifyRow = function(puzzle, cell) {

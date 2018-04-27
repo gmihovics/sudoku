@@ -73,4 +73,92 @@ describe('Sudoku', function() {
       assert.deepEqual(sudoku.getSquareForCell(puzzle, [4, 4]), [1, 5, 2, 8, 7, 6, 4, 3, 9]);
     });
   });
+
+  describe('createPuzzle', function() {
+    it('should return an array of 81 numbers', function() {
+      assert.equal(sudoku.createPuzzle().length, 81);
+    });
+  });
+
+  describe('generateCell', function() {
+    it('should return a completed puzzle when the last cell is successfully filled', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0).length, 81);
+    });
+
+    it('should set the current cell with a valid number when found', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0)[80], 2);
+    });
+
+    it('should go through all available numbers until it finds a valid one', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0)[80], 2);
+    });
+
+    it('should find the next cell after filling the current one', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [6, 2], 0)[80], 2);
+    });
+
+    it('should backtrack and change the previous cell when no numbers can be found for the current cell', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 2
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0)[79], 6);
+    });
+  });
 });
