@@ -6,16 +6,19 @@ Sudoku.prototype.createPuzzle = function() {
   return puzzle;
 };
 
-Sudoku.prototype.verifyRow = function(square) {
-  return this.verifyArray(square);
+Sudoku.prototype.verifyRow = function(puzzle, cell) {
+  let row = this.getRowForCell(puzzle, cell);
+  return this.verifyArray(row);
 };
 
-Sudoku.prototype.verifyColumn = function(column) {
+Sudoku.prototype.verifyColumn = function(puzzle, cell) {
+  let column = this.getColumnForCell(puzzle, cell);
   return this.verifyArray(column);
 };
 
-Sudoku.prototype.verifySquare = function(row) {
-  return this.verifyArray(row);
+Sudoku.prototype.verifySquare = function(puzzle, cell) {
+  let square = this.getSquareForCell(puzzle, cell);
+  return this.verifyArray(square);
 };
 
 Sudoku.prototype.verifyArray = function(numberArray) {
