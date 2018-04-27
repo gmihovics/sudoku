@@ -81,7 +81,7 @@ describe('Sudoku', function() {
   });
 
   describe('generateCell', function() {
-    it('should return a completed puzzle when the last cell is successfully filled', function() {
+    it('should return a completed puzzle when there are no more cells to generate', function() {
       let puzzle = [
         4, 5, 6, 7, 1, 3, 2, 9, 8,
         1, 2, 9, 6, 8, 4, 5, 3, 7,
@@ -91,10 +91,10 @@ describe('Sudoku', function() {
         8, 6, 2, 4, 3, 9, 7, 1, 5,
         2, 4, 1, 9, 6, 7, 8, 5, 3,
         6, 8, 5, 3, 2, 1, 9, 7, 4,
-        3, 9, 7, 5, 4, 8, 1, 6
+        3, 9, 7, 5, 4, 8, 1, 6, 2
       ];
 
-      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0).length, 81);
+      assert.equal(sudoku.generateCell(puzzle, 81, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0).length, 81);
     });
 
     it('should set the current cell with a valid number when found', function() {
@@ -107,10 +107,26 @@ describe('Sudoku', function() {
         8, 6, 2, 4, 3, 9, 7, 1, 5,
         2, 4, 1, 9, 6, 7, 8, 5, 3,
         6, 8, 5, 3, 2, 1, 9, 7, 4,
-        3, 9, 7, 5, 4, 8, 1, 6
+        3, 9, 7, 5, 4, 8, 1, 6, 0
       ];
 
       assert.equal(sudoku.generateCell(puzzle, 80, [2], 0)[80], 2);
+    });
+
+    it('should return a completed puzzle when the last cell is successfully filled', function() {
+      let puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6, 0
+      ];
+
+      assert.equal(sudoku.generateCell(puzzle, 80, [2], 0).length, 81);
     });
 
     it('should go through all available numbers until it finds a valid one', function() {

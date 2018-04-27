@@ -2,13 +2,30 @@ const Sudoku = function() {
 };
 
 Sudoku.prototype.createPuzzle = function() {
-  let puzzle = [];
+  let puzzle = Array(81);
+  let numbers = Array(9).fill(0).map((number, index) => index);
 
-  return puzzle;
+  return this.generateCell(puzzle, 0, this.shuffleArray(numbers), 0);
 };
 
 Sudoku.prototype.generateCell = function(puzzle, cellIndex, numbers, numbersIndex) {
-  return puzzle;
+  if (puzzle.length === cellIndex) {
+    return puzzle;
+  }
+
+  if (numbers.length === numbersIndex) {
+    return this.generateCell(puzzle, cellIndex-1, numbers, numbersIndex)
+  }
+
+  puzzle[cellIndex] = numbers[numbersIndex];
+
+  let cell = [cellIndex % 9, Math.floor(cellIndex / 9)];
+
+  if (this.verifyColumn(puzzle, cell) && this.verifySquare(puzzle, cell) && this.verifyRow(puzzle, cell)) {
+    return this.generateCell(puzzle, cellIndex+1, numbers, 0);
+  }
+
+  return this.generateCell(puzzle, cellIndex, numbers, numbersIndex+1);
 };
 
 Sudoku.prototype.shuffleArray = function(array) {
