@@ -123,8 +123,32 @@ describe('Sudoku', function() {
   });
 
   describe('createPuzzle', function() {
+    let puzzle = [];
+
     it('should return an array of 81 numbers', function() {
-      assert.equal(sudoku.createPuzzle().length, 81);
+      puzzle = sudoku.createPuzzle();
+
+      assert.equal(puzzle.length, 81);
+    });
+
+    it('should return a puzzle that has 9 valid rows', function() {
+      for (let i = 0; i < 9; i++) {
+        assert.isTrue(sudoku.verifyRow(puzzle, [0, i]));
+      }
+    });
+
+    it('should return a puzzle that has 9 valid columns', function() {
+      for (let i = 0; i < 9; i++) {
+        assert.isTrue(sudoku.verifyColumn(puzzle, [i, 0]));
+      }
+    });
+
+    it('should return a puzzle that has 9 valid columns', function() {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          assert.isTrue(sudoku.verifySquare(puzzle, [j * 3, i * 3]));
+        }
+      }
     });
   });
 
@@ -155,7 +179,7 @@ describe('Sudoku', function() {
         8, 6, 2, 4, 3, 9, 7, 1, 5,
         2, 4, 1, 9, 6, 7, 8, 5, 3,
         6, 8, 5, 3, 2, 1, 9, 7, 4,
-        3, 9, 7, 5, 4, 8, 1, 6, 0
+        3, 9, 7, 5, 4, 8, 1, 6
       ];
 
       assert.equal(sudoku.generateCell(puzzle, 80, [2], 0)[80], 2);
@@ -171,7 +195,7 @@ describe('Sudoku', function() {
         8, 6, 2, 4, 3, 9, 7, 1, 5,
         2, 4, 1, 9, 6, 7, 8, 5, 3,
         6, 8, 5, 3, 2, 1, 9, 7, 4,
-        3, 9, 7, 5, 4, 8, 1, 6, 0
+        3, 9, 7, 5, 4, 8, 1, 6
       ];
 
       assert.equal(sudoku.generateCell(puzzle, 80, [2], 0).length, 81);
@@ -187,7 +211,7 @@ describe('Sudoku', function() {
         8, 6, 2, 4, 3, 9, 7, 1, 5,
         2, 4, 1, 9, 6, 7, 8, 5, 3,
         6, 8, 5, 3, 2, 1, 9, 7, 4,
-        3, 9, 7, 5, 4, 8, 1
+        3, 9, 7, 5, 4, 8, 1, 6
       ];
 
       assert.equal(sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 0)[80], 2);
