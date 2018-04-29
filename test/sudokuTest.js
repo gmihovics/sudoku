@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const sinon = require('sinon');
 const sinonTest = require('sinon-test')(sinon);
-const sudoku = require('../src/sudoku');
+const sudoku = require('../src/backend/sudoku');
 
 describe('Sudoku', () => {
   const puzzle = [

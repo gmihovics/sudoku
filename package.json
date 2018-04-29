@@ -4,6 +4,7 @@
   "description": "A web service and single page app that calulates and displays a solved sudoku puzzle",
   "main": "index.js",
   "scripts": {
+    "start": "node --harmony --use-strict src/backend/index.js",
     "test": "mocha"
   },
   "author": "Garrett Mihovics <garrett@gmihovics.com>",
