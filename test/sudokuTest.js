@@ -123,32 +123,35 @@ describe('Sudoku', function() {
   });
 
   describe('createPuzzle', function() {
-    let puzzle = [];
+    describe('Integration tests', function() {
 
-    it('should return an array of 81 numbers', function() {
-      puzzle = sudoku.createPuzzle();
+      let puzzle = [];
 
-      assert.equal(puzzle.length, 81);
-    });
+      it('should return an array of 81 numbers', function() {
+        puzzle = sudoku.createPuzzle();
 
-    it('should return a puzzle that has 9 valid rows', function() {
-      for (let i = 0; i < 9; i++) {
-        assert.isTrue(sudoku.verifyRow(puzzle, [0, i]));
-      }
-    });
+        assert.equal(puzzle.length, 81);
+      });
 
-    it('should return a puzzle that has 9 valid columns', function() {
-      for (let i = 0; i < 9; i++) {
-        assert.isTrue(sudoku.verifyColumn(puzzle, [i, 0]));
-      }
-    });
-
-    it('should return a puzzle that has 9 valid columns', function() {
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          assert.isTrue(sudoku.verifySquare(puzzle, [j * 3, i * 3]));
+      it('should return a puzzle that has 9 valid rows', function() {
+        for (let i = 0; i < 9; i++) {
+          assert.isTrue(sudoku.verifyRow(puzzle, [0, i]));
         }
-      }
+      });
+
+      it('should return a puzzle that has 9 valid columns', function() {
+        for (let i = 0; i < 9; i++) {
+          assert.isTrue(sudoku.verifyColumn(puzzle, [i, 0]));
+        }
+      });
+
+      it('should return a puzzle that has 9 valid columns', function() {
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            assert.isTrue(sudoku.verifySquare(puzzle, [j * 3, i * 3]));
+          }
+        }
+      });
     });
   });
 
