@@ -1,4 +1,6 @@
 const { assert } = require('chai');
+const sinon = require('sinon');
+const sinonTest = require('sinon-test')(sinon);
 const sudoku = require('../src/sudoku');
 
 describe('Sudoku', () => {
@@ -123,6 +125,28 @@ describe('Sudoku', () => {
   });
 
   describe('createPuzzle', () => {
+    // eslint-disable-next-line func-names
+    it('should extract static cells from the options object and preset the values in the puzzle', sinonTest(function () {
+      const generateCellStub = this.stub(sudoku, 'generateCell');
+
+      generateCellStub.returns([]);
+      sudoku.createPuzzle({ staticCells: { 0: 5, 72: 2 } });
+
+      assert.deepEqual(generateCellStub.args[0][5], [0, 72]);
+    }));
+
+    // eslint-disable-next-line func-names
+    it('should extract static cells from the options object and pass the cell indexes in an array', sinonTest(function () {
+      const generateCellStub = this.stub(sudoku, 'generateCell');
+
+      generateCellStub.returns([]);
+      sudoku.createPuzzle({ staticCells: { 0: 5, 72: 2 } });
+
+      const puzzle = generateCellStub.args[0][0];
+
+      assert.deepEqual([puzzle[0], puzzle[72]], [5, 2]);
+    }));
+
     describe.skip('Integration tests', () => {
       let puzzle = [];
 
@@ -233,6 +257,98 @@ describe('Sudoku', () => {
       ];
 
       assert.equal(sudoku.generateCell(puzzle, 80, [6, 2], 0, [])[80], 2);
+    });
+
+    // eslint-disable-next-line func-names
+    it('should shuffle numbers array every row', sinonTest(function () {
+      const puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, 1, 6
+      ];
+
+      const shuffleArraySpy = this.spy(sudoku, 'shuffleArray');
+
+      sudoku.generateCell(puzzle, 80, [1, 2, 3, 4, 5, 6, 7, 8, 9], 1, []);
+
+      assert.isTrue(shuffleArraySpy.called);
+    }));
+
+    it('should respect the value for a static cell when it encounters one', () => {
+      const puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 8, undefined, 6
+      ];
+
+      assert.equal(
+        sudoku.generateCell(
+          puzzle,
+          78,
+          [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          0,
+          [],
+          [78]
+        )[79],
+        6
+      );
+    });
+
+    it('should respect the value for a static cell when it encounters one when backtracking', () => {
+      const puzzle = [
+        4, 5, 6, 7, 1, 3, 2, 9, 8,
+        1, 2, 9, 6, 8, 4, 5, 3, 7,
+        7, 3, 8, 2, 9, 5, 6, 4, 1,
+        9, 7, 4, 1, 5, 2, 3, 8, 6,
+        5, 1, 3, 8, 7, 6, 4, 2, 9,
+        8, 6, 2, 4, 3, 9, 7, 1, 5,
+        2, 4, 1, 9, 6, 7, 8, 5, 3,
+        6, 8, 5, 3, 2, 1, 9, 7, 4,
+        3, 9, 7, 5, 4, 2, undefined, 6
+      ];
+
+      assert.equal(
+        sudoku.generateCell(
+          puzzle,
+          78,
+          [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          0,
+          [{ numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9], index: 1 }],
+          [78]
+        )[79],
+        6
+      );
+    });
+
+    it('should return an empty array when a puzzle can not be solved because of bad static cells', () => {
+      const puzzle = [
+        undefined, 2, 3, 4, 5, 6, 7, 8, 9,
+        1
+      ];
+
+      assert.equal(
+        sudoku.generateCell(
+          puzzle,
+          0,
+          [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          0,
+          [],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        ).length,
+        0
+      );
     });
 
     it('should backtrack and change the previous cell when no numbers can be found for the current cell', () => {
