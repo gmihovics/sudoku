@@ -1,10 +1,33 @@
 const express = require('express');
+const sudoku = require('./sudoku');
 
 const app = express();
 
 app.get(
   '/board',
   (request, response) => response.send('Sudoku')
+);
+
+app.get(
+  '/api',
+  (request, response) => {
+    const queryParams = request.query || {};
+    const staticCells = {};
+
+    Object.keys(queryParams).forEach((key) => {
+      const parsedKey = parseInt(key, 10);
+
+      if (!Number.isNaN(parsedKey)) {
+        const parsedValue = parseInt(queryParams[key], 10);
+
+        if (!Number.isNaN(parsedValue)) {
+          staticCells[parsedKey] = parsedValue;
+        }
+      }
+    });
+
+    return response.send(sudoku.createPuzzle({ staticCells }));
+  }
 );
 
 app.listen(
