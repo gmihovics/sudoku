@@ -4,11 +4,23 @@
 function Sudoku() {
 }
 
-Sudoku.prototype.createPuzzle = function createPuzzle() {
+Sudoku.prototype.createPuzzle = function createPuzzle(options) {
   const puzzle = [];
+  const staticCells = [];
   const numbers = Array(9).fill(0).map((number, index) => index + 1);
 
-  return this.generateCell(puzzle, 0, this.shuffleArray(numbers), 0, []);
+  if (options && Object.prototype.hasOwnProperty.call(options, 'staticCells')) {
+    Object.keys(options.staticCells).forEach((key) => {
+      const parsedKey = parseInt(key, 10);
+
+      if (!Number.isNaN(parsedKey)) {
+        puzzle[parsedKey] = options.staticCells[key];
+        staticCells.push(parsedKey);
+      }
+    });
+  }
+
+  return this.generateCell(puzzle, 0, this.shuffleArray(numbers), 0, [], staticCells);
 };
 
 Sudoku.prototype.generateCell = function generatePuzzle(
@@ -16,21 +28,53 @@ Sudoku.prototype.generateCell = function generatePuzzle(
   cellIndex,
   numbers,
   numbersIndex,
-  history
+  history,
+  staticCells = [],
+  isBacktracking = false
 ) {
+  // Puzzle is expected size and we have passed the end of the cells
   if (puzzle.length === 81 && cellIndex === puzzle.length) {
     return puzzle;
   }
 
+  // Out of numbers to try for current cell
   if (numbers.length === numbersIndex) {
+    // can't find a valid value for cell 0 because of bad static cells
+    if (cellIndex === 0) {
+      return [];
+    }
+
     const previousIteration = history.pop();
     return this.generateCell(
       puzzle,
       cellIndex - 1,
       previousIteration.numbers,
       previousIteration.index + 1,
-      history
+      history,
+      staticCells,
+      true
     );
+  }
+
+  // This cell is a static cell
+  if (staticCells.indexOf(cellIndex) !== -1) {
+    // Static cells are considered correct so they prevent backtracking
+    // That means we have to pass our backtracking state between calls now
+    if (isBacktracking) {
+      const previousIteration = history.pop();
+      return this.generateCell(
+        puzzle,
+        cellIndex - 1,
+        previousIteration.numbers,
+        previousIteration.index + 1,
+        history,
+        staticCells,
+        true
+      );
+    }
+
+    history.push({ numbers, index: -1 });
+    return this.generateCell(puzzle, cellIndex + 1, numbers, 0, history, staticCells);
   }
 
   puzzle[cellIndex] = numbers[numbersIndex];
@@ -38,23 +82,23 @@ Sudoku.prototype.generateCell = function generatePuzzle(
   const cell = [cellIndex % 9, Math.floor(cellIndex / 9)];
 
   if (
-    this.verifyColumn(puzzle, cell)
-    && this.verifySquare(puzzle, cell)
-    && this.verifyRow(puzzle, cell)
+    this.verifyColumn(puzzle, cell) &&
+    this.verifySquare(puzzle, cell) &&
+    this.verifyRow(puzzle, cell)
   ) {
     history.push({ numbers, index: numbersIndex });
 
-    if (cellIndex % 9 === 0) {
+    if ((cellIndex + 1) % 9 === 0) {
       // eslint-disable-next-line no-param-reassign
       numbers = this.shuffleArray(numbers);
     }
 
-    return this.generateCell(puzzle, cellIndex + 1, numbers, 0, history);
+    return this.generateCell(puzzle, cellIndex + 1, numbers, 0, history, staticCells);
   }
 
   puzzle[cellIndex] = null;
 
-  return this.generateCell(puzzle, cellIndex, numbers, numbersIndex + 1, history);
+  return this.generateCell(puzzle, cellIndex, numbers, numbersIndex + 1, history, staticCells);
 };
 
 Sudoku.prototype.shuffleArray = (array) => {
