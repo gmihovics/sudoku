@@ -7,6 +7,10 @@
     line-height: 24px;
 }
 
+.square.active {
+    background-color: #0dc5c1;
+}
+
 .board-row {
     display: block;
 }

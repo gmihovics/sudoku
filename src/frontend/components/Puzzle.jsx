@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 import Square from './Square';
 
 class Puzzle extends Component {
-  static renderSquare(index, number) {
-    return <Square key={index} number={number} />;
-  }
-
-  static getPuzzleFromServer(success) {
-    Got('http://localhost:8080/api', { json: true }).then(success);
+  static getPuzzleFromServer(success, params = {}) {
+    Got('http://localhost:8080/api', { query: params, json: true }).then(success);
   }
 
   constructor() {
@@ -16,10 +12,12 @@ class Puzzle extends Component {
 
     this.state = {
       isLoading: true,
-      cells: new Array(81).fill(0)
+      cells: new Array(81).fill(0),
+      staticCells: {}
     };
 
     this.reloadPuzzle = this.reloadPuzzle.bind(this);
+    this.toggleCell = this.toggleCell.bind(this);
   }
 
   componentDidMount() {
@@ -29,14 +27,44 @@ class Puzzle extends Component {
     });
   }
 
+  toggleCell(index, number) {
+    const { staticCells } = this.state;
+
+    if (Object.prototype.hasOwnProperty.call(staticCells, index)) {
+      delete staticCells[index];
+    } else {
+      staticCells[index] = number;
+    }
+
+    this.setState({ staticCells });
+  }
+
   reloadPuzzle() {
     this.setState({ isLoading: true });
+
+    const params = {};
+    Object.keys(this.state.staticCells).forEach((key) => {
+      params[key] = this.state.staticCells[key];
+    });
 
     Puzzle.getPuzzleFromServer(
       (response) => {
         this.setState({ isLoading: false });
         this.setState({ cells: response.body });
-      });
+      },
+      params
+    );
+  }
+
+  renderSquare(index, number) {
+    return (
+      <Square
+        key={index}
+        number={number}
+        isActive={Object.prototype.hasOwnProperty.call(this.state.staticCells, index)}
+        clickHandler={this.toggleCell.bind(this, index, number)}
+      />
+    );
   }
 
   render() {
@@ -48,7 +76,7 @@ class Puzzle extends Component {
         const row = [];
 
         for (let j = 0; j < 9; j += 1) {
-          row.push(Puzzle.renderSquare((i * 9) + j, this.state.cells[(i * 9) + j]));
+          row.push(this.renderSquare((i * 9) + j, this.state.cells[(i * 9) + j]));
         }
 
         board.push(<div className="board-row" key={i}>{row}</div>);
