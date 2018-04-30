@@ -1,7 +1,10 @@
 const express = require('express');
+const path = require('path');
 const sudoku = require('./sudoku');
 
 const app = express();
+
+app.use(express.static(path.resolve(__dirname, '../../public')));
 
 app.get(
   '/board',
