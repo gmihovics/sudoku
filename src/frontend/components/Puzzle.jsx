@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import Got from 'got';
+import React, {Component} from 'react';
+import Square from './Square';
 
 class Puzzle extends Component {
   static renderSquare(index, number) {
@@ -11,6 +13,13 @@ class Puzzle extends Component {
     this.state = {
       cells: new Array(81).fill(0)
     };
+  }
+
+  componentDidMount() {
+    Got('http://localhost:8080/api', { json: true })
+      .then((response) => {
+        this.setState({ cells: response.body });
+      });
   }
 
   render() {
