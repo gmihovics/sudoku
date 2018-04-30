@@ -4,7 +4,7 @@ import Square from './Square';
 
 class Puzzle extends Component {
   static getPuzzleFromServer(success, params = {}) {
-    Got('http://localhost:8080/api', { query: params, json: true }).then(success);
+    Got('/sudoku/api', { query: params, json: true }).then(success);
   }
 
   constructor() {

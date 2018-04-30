@@ -3,16 +3,16 @@ const path = require('path');
 const sudoku = require('./sudoku');
 
 const app = express();
+const port = process.env.PORT || 8080;
 
-app.use(express.static(path.resolve(__dirname, '../../public')));
+app.use('/sudoku/', express.static(path.resolve(__dirname, '../../public')));
+
+app.get('/sudoku/board', (req, res) => {
+  res.sendFile(path.resolve('public/index.html'));
+});
 
 app.get(
-  '/board',
-  (request, response) => response.send('Sudoku')
-);
-
-app.get(
-  '/api',
+  '/sudoku/api',
   (request, response) => {
     const queryParams = request.query || {};
     const staticCells = {};
@@ -34,6 +34,6 @@ app.get(
 );
 
 app.listen(
-  8080,
-  () => console.log('sudoku app listening on port 8080!')
+  port,
+  () => console.log(`sudoku app listening on port ${port}!`)
 );
