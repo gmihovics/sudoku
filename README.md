@@ -18,8 +18,17 @@ new and randomized BUT the selected cell value will be the same
 
 ##Usage
 
-To build and run the application simply run
+To build and run the application use command
 
-`./npm	build`
+`npm start`
 
-To access the single page application, go to the url `http://localhost:8080/sudoku/board`
+
+To build a docker image `sudoku-ws:level-4` run
+
+`npm run docker`
+
+To run the docker image run
+
+`docker run -d -p 8080:8080 sudoku-ws:level-4`
+
+Puzzle can be accessed at [http://localhost:8080/sudoku/board](http://localhost:8080/sudoku/board)
