@@ -4,9 +4,11 @@
   "description": "A web service and single page app that calulates and displays a solved sudoku puzzle",
   "main": "index.js",
   "scripts": {
-    "start": "node --harmony --use-strict src/backend/index.js",
+    "docker": "npm run package && docker build -t sudoku-ws:level-4 .",
+    "package": "npm test && npm run webpack",
+    "start": "npm run package && node --harmony --use-strict src/backend/index.js",
     "test": "mocha --require test/setup.js --require babel-core/register test/**/*Test.{js,jsx}",
-    "webpack": "./node_modules/.bin/webpack --mode development"
+    "webpack": "./node_modules/.bin/webpack --mode production"
   },
   "author": "Garrett Mihovics <garrett@gmihovics.com>",
   "license": "ISC",
