@@ -7,6 +7,10 @@ class Puzzle extends Component {
     return <Square key={index} number={number} />;
   }
 
+  static getPuzzleFromServer(success) {
+    Got('http://localhost:8080/api', { json: true }).then(success);
+  }
+
   constructor() {
     super();
 
@@ -14,11 +18,22 @@ class Puzzle extends Component {
       isLoading: true,
       cells: new Array(81).fill(0)
     };
+
+    this.reloadPuzzle = this.reloadPuzzle.bind(this);
   }
 
   componentDidMount() {
-    Got('http://localhost:8080/api', { json: true })
-      .then((response) => {
+    Puzzle.getPuzzleFromServer((response) => {
+      this.setState({ isLoading: false });
+      this.setState({ cells: response.body });
+    });
+  }
+
+  reloadPuzzle() {
+    this.setState({ isLoading: true });
+
+    Puzzle.getPuzzleFromServer(
+      (response) => {
         this.setState({ isLoading: false });
         this.setState({ cells: response.body });
       });
@@ -45,6 +60,8 @@ class Puzzle extends Component {
         <div className="board">
           {this.state.isLoading ? spinner : board}
         </div>
+
+        <button className="reload" onClick={this.reloadPuzzle}>New Puzzle</button>
       </div>
     );
   }

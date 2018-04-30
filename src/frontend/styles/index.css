@@ -20,6 +20,11 @@
     border: 1px solid black;
 }
 
+.ui button.reload {
+    width: 100%;
+    margin-top: 20px;
+}
+
 .ui .loader {
     font-size: 10px;
     margin: 90px auto;
